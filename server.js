@@ -2,6 +2,7 @@
 const express = require('express');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
+const cTable = require('console.table');
 
 const PORT = process.env.PORT || 3001;
 const app = expess();
@@ -16,7 +17,7 @@ const db = mysql.createConnection(
         host: 'localhost',
         user: 'root',
         password: 'training',
-        database: ''
+        database: 'company_db'
     }
 )
 
