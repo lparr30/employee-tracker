@@ -22,6 +22,7 @@ const db = mysql.createConnection(
 )
 
 // PROMPTING QUESTIONS
+const init = () => {
 inquirer.prompt([
     {
         type: "list",
@@ -43,14 +44,52 @@ inquirer.prompt([
             console.table(results);
         });
     }
-    else {
-        db.query('SELECT * FROM employees;', function (err, results) {
+    else if(task === "View all employees"){
+        db.query('SELECT * FROM employee;', function (err, results) {
             console.table(results);
+        });
+    }
+    else if(task === "Add a department"){
+        inquirer.prompt([
+            {
+                type: "input",
+                message: "What is the name of the department?",
+                name: "department"
+            }
+        ])
+        .then((answer) => {
+            const department = answer.department
+            db.query('INSERT INTO department (name) VALUES (?);', [department], function(err, results) {
+                if(err) {
+                    throw err;
+                }
+            });
+            db.query('SELECT * FROM department;', function (err, results) {
+                console.table(results);
+            });
         })
     }
-})
+    else if(task === "Add a role"){
+        inquirer.prompt([
+            {
+                type:"input",
+                message: "What is the title of the role?",
+                name: "role"
+            }
+        ])
+        .then((reply) => {
+            const role = reply.role
+            db.query('INSERT INTO role (titleL VALUES (?);', [role], function(err, results) {
+                if(err) {
+                    throw err;
+                }
+            });
+        })
+    }
+})}
 
-// ROUTES
+init()
+
 
 app.listen(PORT, () => {
     console.log(`Server now running on port ${PORT}`)
